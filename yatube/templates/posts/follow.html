@@ -1,0 +1,25 @@
+<!-- templates/posts/index.html -->
+{% extends 'base.html' %}
+{% load cache %}
+{% block title %}
+  Ваши подписки
+{% endblock %}
+{% block content %}
+  {% include 'posts/includes/switcher.html' %}
+  <div class="container py-5">     
+    <h1>Новые публикации</h1>
+    
+    {% cache 20 follow_page page_obj.number %}
+      {% for post in page_obj %}
+        {% include 'posts/includes/posts_list.html' %}
+        {% if post.group %}
+          <a href="{% url 'posts:group_posts' post.group.slug %}">все записи группы</a>
+        {% endif %}
+      {% if not forloop.last %}<hr>{% endif %}
+      {% empty %}
+        <h5>Вы еще ни на кого не подписаны</h5>
+      {% endfor %}
+    {% endcache %}
+    {% include 'posts/includes/paginator.html' %}
+  </div>  
+{% endblock %} 
