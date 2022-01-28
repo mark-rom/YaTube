@@ -111,4 +111,4 @@ class PostsURLTests(TestCase):
         """Unexisting page raises 404 error"""
         response = self.guest_client.get('/unexisting_page/')
 
-        self.assertEquals(response.status_code, HTTPStatus.NOT_FOUND)
+        self.assertEqual(response.status_code, HTTPStatus.NOT_FOUND)

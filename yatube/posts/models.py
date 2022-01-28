@@ -43,7 +43,7 @@ class Post(models.Model):
         related_name='posts',
         verbose_name='Автор',
     )
-    group: ForeignKey = ForeignKey(
+    group = ForeignKey(
         Group,
         blank=True,
         null=True,
@@ -110,3 +110,13 @@ class Follow(models.Model):
         related_name='following',
         verbose_name='Контентмейкер'
     )
+
+    class Meta:
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['user', 'author'],
+                name='Уникальная подписка'
+            )
+        ]

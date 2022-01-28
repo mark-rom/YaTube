@@ -77,6 +77,7 @@ class PostsURLTests(TestCase):
         shutil.rmtree(TEMP_MEDIA_ROOT, ignore_errors=True)
 
     def setUp(self):
+        cache.clear()
         self.author_client = Client()
         self.author_client.force_login(self.user)
 
@@ -288,8 +289,6 @@ class PostsURLTests(TestCase):
 
     def test_index_page_cache(self):
         """Index page's cache performs correctly."""
-        # Никита, я буду удивлён, если это не надо бить на несколько тестов
-
         response_cntnt = self.author_client.get(reverse('posts:index')).content
         Post.objects.first().delete()
         cache_content = self.author_client.get(reverse('posts:index')).content
@@ -320,42 +319,24 @@ class PostsURLTests(TestCase):
 
     def test_profile_follow(self):
         """Profile_follow function executes correctly."""
-        follower_user = self.follower_user.username
-        response = self.author_client.get(reverse(
-            'posts:profile',
-            kwargs={'username': follower_user}
-        ))
-        response_flwng = response.context['following']
+        follower_user = self.follower_user
+        count_follow = Follow.objects.count()
 
         self.author_client.get(reverse(
             'posts:profile_follow',
-            kwargs={'username': follower_user}
+            kwargs={'username': follower_user.username}
         ))
-        response_upd = self.author_client.get(reverse(
-            'posts:profile',
-            kwargs={'username': follower_user}
-        ))
-        response_flwng_upd = response_upd.context['following']
 
-        self.assertNotEqual(response_flwng, response_flwng_upd)
+        self.assertEqual(Follow.objects.count(), count_follow + 1)
 
     def test_profile_unfollow(self):
         """Profile_unfollow function executes correctly."""
-        author_user = self.user.username
-        response = self.follower_client.get(reverse(
-            'posts:profile',
-            kwargs={'username': author_user}
-        ))
-        response_flwng = response.context['following']
+        author_user = self.user
+        count_follow = Follow.objects.count()
 
         self.follower_client.get(reverse(
             'posts:profile_unfollow',
-            kwargs={'username': author_user}
+            kwargs={'username': author_user.username}
         ))
-        response_upd = self.follower_client.get(reverse(
-            'posts:profile',
-            kwargs={'username': author_user}
-        ))
-        response_flwng_upd = response_upd.context['following']
 
-        self.assertNotEqual(response_flwng, response_flwng_upd)
+        self.assertEqual(Follow.objects.count(), count_follow - 1)
