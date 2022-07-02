@@ -328,6 +328,12 @@ class PostsURLTests(TestCase):
         ))
 
         self.assertEqual(Follow.objects.count(), count_follow + 1)
+        self.assertTrue(
+            Follow.objects.filter(
+                user=follower_user,
+                author=self.user
+            ).exists()
+        )
 
     def test_profile_unfollow(self):
         """Profile_unfollow function executes correctly."""
