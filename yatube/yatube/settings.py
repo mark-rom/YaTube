@@ -12,6 +12,17 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 
+from dotenv import load_dotenv
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
+
+load_dotenv()
+
+sentry_sdk.init(
+    dsn="https://eee1405565bd49e9bbcfb2c49afe0de6@o1279265.ingest.sentry.io/6479698", 
+    integrations=[DjangoIntegration()],
+)
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -23,7 +34,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'v13g$avl=(m02u6teyx3k6#ox+p-l+hey%3*0q3ucy51zg1s9-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 CSRF_FAILURE_VIEW = 'core.views.csrf_failure'
 
@@ -32,6 +43,8 @@ ALLOWED_HOSTS = [
     'localhost',
     'testserver',
     '[::1]',
+    '51.250.110.193',
+    'yatube-practice.servebeer.com',
 ]
 
 
@@ -65,7 +78,8 @@ ROOT_URLCONF = 'yatube.urls'
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, 'templates')
 
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'yatube', 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 TEMPLATES = [
     {
@@ -92,8 +106,12 @@ WSGI_APPLICATION = 'yatube.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': os.getenv('DB_ENGINE', 'django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME'),
+	'USER': os.getenv('POSTGRES_USER'),
+	'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+	'HOST': os.getenv('DB_HOST'),
+	'PORT': os.getenv('DB_PORT'),
     }
 }
 
@@ -138,6 +156,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
 
 LOGIN_URL = 'users:login'
 LOGIN_REDIRECT_URL = 'posts:index'
