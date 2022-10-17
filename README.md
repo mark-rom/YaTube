@@ -1,36 +1,36 @@
 ## YaTube ##
-### Описание: ###
-YaTube является аналогом LiveJournal и позволяет создавать пубикации,делиться ими в сообществах, подписываться на других пользователей и комментировать их публикации. Неавторизованные пользователи могут только читать публикации.
+### Description: ###
+YaTube is a social network allowing it's users to make posts, share them in groups, subscribe to other users and comment on their posts. Unauthorized users are allowed to read.
 
 YaTube реализован на view-функциях чистого `Django 2.2.16` и имеет ользовательский интерфейс.
 
-## Как запустить проект: ##
+## How to start project: ##
 
-### Клонируйте репозиторий: ###
+### Clone repo: ###
 
     git clone https://github.com/mark-rom/YaTube.git
 
-### Перейдите в репозиторий в командной строке: ###
+### Go to new dir using command line: ###
     cd YaTube
 
-### Создайте и активируйте виртуальное окружение: ###
+### Create and activate virtual environment: ###
     python3.9 -m venv env
 
-###### для Mac OS
+###### on Mac OS
     source env/bin/activate
 
-###### для Windows OS
+###### on Windows
     source venv/Scripts/activate
 
-### Установите зависимости из файла requirements.txt: ###
-### Обновите pip:
+### Set requirements from requirements.txt: ###
+### Update pip:
     python3 -m pip install --upgrade pip
 
-### Установите зависимости:
+### Set requirements:
     pip install -r requirements.txt
   
-### Выполните миграции: ###
+### Make migrations: ###
     python3 manage.py migrate
 
-### Запустить проект: ###
+### Start the project: ###
     python3 manage.py runserver
